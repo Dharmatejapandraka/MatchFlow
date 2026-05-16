@@ -859,6 +859,14 @@ def admin_logout():
 
     return redirect('/admin')
 
+@app.route('/reset_db')
+def reset_db():
+    with app.app_context():
+        db.drop_all()
+        db.create_all()
+    return "Database Cleared Successfully"
+
+
 # ---------------- RUN APP ----------------
 
 if __name__ == '__main__':
