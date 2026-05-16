@@ -861,10 +861,14 @@ def admin_logout():
 
 @app.route('/reset_db')
 def reset_db():
-    with app.app_context():
-        db.drop_all()
-        db.create_all()
-    return "Database Cleared Successfully"
+    import os
+
+    if os.path.exists("database.db"):
+        os.remove("database.db")
+
+    db.create_all()
+
+    return "Database Fully Reset Successfully"
 
 
 # ---------------- RUN APP ----------------
