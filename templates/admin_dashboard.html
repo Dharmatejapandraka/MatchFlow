@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Dashboard</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        body{
+            margin:0;
+            padding:0;
+            font-family:Arial;
+            background:#f4f6f9;
+        }
+
+        .navbar{
+            background:#ff416c;
+            color:white;
+            padding:20px 40px;
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+        }
+
+        .navbar h1{
+            margin:0;
+        }
+
+        .dashboard{
+            width:90%;
+            margin:30px auto;
+        }
+
+        .stats{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:20px;
+            margin-top:30px;
+        }
+
+        .stat-card{
+            background:white;
+            border-radius:20px;
+            padding:30px;
+            text-align:center;
+            box-shadow:0 4px 15px rgba(0,0,0,0.1);
+            transition:0.3s;
+        }
+
+        .stat-card:hover{
+            transform:translateY(-5px);
+        }
+
+        .stat-card h2{
+            font-size:40px;
+            margin:0;
+            color:#ff416c;
+        }
+
+        .stat-card p{
+            margin-top:10px;
+            font-size:18px;
+            color:#555;
+        }
+
+        .section-title{
+            margin-top:50px;
+            margin-bottom:20px;
+            color:#333;
+            font-size:32px;
+        }
+
+        .table-box{
+            background:white;
+            border-radius:20px;
+            padding:20px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.1);
+            overflow-x:auto;
+        }
+
+        table{
+            width:100%;
+            border-collapse:collapse;
+        }
+
+        th{
+            background:#ff416c;
+            color:white;
+            padding:15px;
+            font-size:18px;
+        }
+
+        td{
+            padding:15px;
+            text-align:center;
+            border-bottom:1px solid #ddd;
+            font-size:17px;
+            color: black;
+        }
+
+        tr:hover{
+            background:#f9f9f9;
+        }
+
+        .active{
+            color:green;
+            font-weight:bold;
+        }
+
+        .inactive{
+            color:red;
+            font-weight:bold;
+        }
+
+        .completed{
+            color:green;
+            font-weight:bold;
+        }
+
+        .open{
+            color:orange;
+            font-weight:bold;
+        }
+
+        .logout-btn{
+            background:black;
+            color:white;
+            padding:12px 25px;
+            border:none;
+            border-radius:10px;
+            font-size:16px;
+            cursor:pointer;
+            font-weight:bold;
+        }
+
+        .logout-btn:hover{
+            background:#222;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="navbar">
+
+    <h1>🛡️ Admin Dashboard</h1>
+
+    <a href="/admin_logout">
+
+        <button class="logout-btn">
+
+            Logout
+
+        </button>
+
+    </a>
+
+</div>
+
+<div class="dashboard">
+
+    <div class="stats">
+
+        <div class="stat-card">
+
+            <h2>{{ total_users }}</h2>
+
+            <p>Total Users</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2>{{ total_requests }}</h2>
+
+            <p>Total Requests</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2>{{ completed_requests }}</h2>
+
+            <p>Completed Donations</p>
+
+        </div>
+
+        <div class="stat-card">
+
+            <h2>{{ active_donors }}</h2>
+
+            <p>Active Donors</p>
+
+        </div>
+
+    </div>
+
+    <!-- USERS -->
+
+    <h2 class="section-title">
+        👥 Users
+    </h2>
+
+    <div class="table-box">
+
+        <table>
+
+            <tr>
+
+                <th>Name</th>
+
+                <th>Blood</th>
+
+                <th>Phone</th>
+
+                <th>Status</th>
+
+            </tr>
+
+            {% for user in users %}
+
+            <tr>
+
+                <td>{{ user.name }}</td>
+
+                <td>{{ user.blood }}</td>
+
+                <td>{{ user.phone }}</td>
+
+                <td>
+
+                    {% if user.status == 'ACTIVE' %}
+
+                        <span class="active">
+                            ACTIVE
+                        </span>
+
+                    {% else %}
+
+                        <span class="inactive">
+                            INACTIVE
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+    <!-- REQUESTS -->
+
+    <h2 class="section-title">
+        🩸 Requests
+    </h2>
+
+    <div class="table-box">
+
+        <table>
+
+            <tr>
+
+                <th>Requester</th>
+
+                <th>Blood</th>
+
+                <th>Amount</th>
+
+                <th>Status</th>
+
+            </tr>
+
+            {% for req in requests_data %}
+
+            <tr>
+
+                <td>{{ req.name }}</td>
+
+                <td>{{ req.blood }}</td>
+
+                <td>{{ req.amount }} ML</td>
+
+                <td>
+
+                    {% if req.status == 'COMPLETED' %}
+
+                        <span class="completed">
+                            COMPLETED
+                        </span>
+
+                    {% else %}
+
+                        <span class="open">
+                            OPEN
+                        </span>
+
+                    {% endif %}
+
+                </td>
+
+            </tr>
+
+            {% endfor %}
+
+        </table>
+
+    </div>
+
+</div>
+
+</body>
+</html>

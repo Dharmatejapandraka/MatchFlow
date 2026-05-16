@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+    <title>Matched Donors</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🩸 Matched Donors</h2>
+
+    <h3>
+        Blood Group:
+        {{ request_data.blood }}
+    </h3>
+
+    <h3>
+        Required Amount:
+        {{ request_data.amount }} ML
+    </h3>
+
+    {% if matched_donors %}
+
+        {% for donor in matched_donors %}
+
+        <div class="card">
+
+            <h3>
+                {{ donor.name }}
+            </h3>
+
+            <p>
+                <b>Blood Group:</b>
+                {{ donor.blood }}
+            </p>
+
+            <p>
+                <b>Phone:</b>
+                {{ donor.phone }}
+            </p>
+
+            <p>
+                <b>PIN Code:</b>
+                {{ donor.pincode }}
+            </p>
+
+            <p>
+                <b>Status:</b>
+                {{ donor.status }}
+            </p>
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <h3 class="error">
+
+            No Matching Donors Found ❌
+
+        </h3>
+
+    {% endif %}
+
+    <a href="/status">
+
+        <button class="back">
+
+            Back Status
+
+        </button>
+
+    </a>
+
+</div>
+
+</body>
+</html>

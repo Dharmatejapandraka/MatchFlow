@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+    <title>Request Status</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        .status-container{
+            width:90%;
+            max-width:1000px;
+            margin:40px auto;
+        }
+
+        .request-card{
+            background:#f4f4f4;
+            padding:25px;
+            border-radius:20px;
+            margin-top:25px;
+            text-align:center;
+        }
+
+        .request-card p{
+            font-size:20px;
+            margin:15px 0;
+            color:black;
+        }
+
+        .btn-group{
+            display:flex;
+            justify-content:center;
+            gap:15px;
+            flex-wrap:wrap;
+            margin-top:25px;
+        }
+
+        .green-btn{
+            background:green;
+            color:white;
+            cursor:not-allowed;
+            padding:14px 28px;
+            border:none;
+            border-radius:10px;
+            font-size:18px;
+            font-weight:bold;
+        }
+
+        .main-title{
+            text-align:center;
+            margin-bottom:30px;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="container status-container">
+
+    <h2 class="main-title">
+        🩸 My Requests
+    </h2>
+
+    {% for req in requests_data %}
+
+    <div class="request-card">
+
+        <p>
+            <b>Blood Group:</b>
+            {{ req.blood }}
+        </p>
+
+        <p>
+            <b>Amount:</b>
+            {{ req.amount }} ML
+        </p>
+
+        <p>
+            <b>Date:</b>
+            {{ req.required_date }}
+        </p>
+
+        <p>
+            <b>Time:</b>
+            {{ req.required_time }}
+        </p>
+
+        <p>
+            <b>Status:</b>
+            {{ req.status }}
+        </p>
+
+        <div class="btn-group">
+
+        {% if req.status == 'COMPLETED' %}
+
+            <button class="green-btn" disabled>
+
+                ✅ COMPLETED
+
+            </button>
+
+        {% else %}
+
+            <a href="/complete_request/{{ req.id }}">
+
+                <button>
+
+                    Complete Request
+
+                </button>
+
+            </a>
+
+            <a href="/donors/{{ req.id }}">
+
+                <button>
+
+                    View Donors
+
+                </button>
+
+            </a>
+
+            <a href="/delete_request/{{ req.id }}">
+
+                <button class="back">
+
+                    Delete Request
+
+                </button>
+
+            </a>
+
+        {% endif %}
+
+        </div>
+
+    </div>
+
+    {% endfor %}
+
+    <br>
+
+    <a href="/profile">
+
+        <button class="back">
+
+            Back Profile
+
+        </button>
+
+    </a>
+
+</div>
+
+</body>
+</html>

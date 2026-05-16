@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+    <title>My Profile</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <style>
+
+        body{
+            margin:0;
+            padding:0;
+            font-family:Arial;
+            background:linear-gradient(to right,#ff416c,#ff4b2b);
+        }
+
+        .profile-container{
+            width:90%;
+            max-width:1000px;
+            margin:30px auto;
+        }
+
+        .top-card{
+            background:white;
+            border-radius:20px;
+            padding:30px;
+            text-align:center;
+            box-shadow:0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .avatar{
+            width:110px;
+            height:110px;
+            border-radius:50%;
+            background:#ff416c;
+            color:white;
+            display:flex;
+            align-items:center;
+            justify-content:center;
+            font-size:45px;
+            margin:auto;
+            font-weight:bold;
+        }
+
+        .top-card h1{
+            margin-top:15px;
+            color:#333;
+        }
+
+        .info-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+            gap:20px;
+            margin-top:30px;
+        }
+
+        .info-card{
+            background:white;
+            padding:20px;
+            border-radius:15px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .info-card h3{
+            color:#ff416c;
+            margin-bottom:15px;
+        }
+
+        .info-card p{
+            color:#333;
+            font-size:17px;
+            margin:8px 0;
+        }
+
+        .status-active{
+            color:green;
+            font-weight:bold;
+        }
+
+        .status-inactive{
+            color:red;
+            font-weight:bold;
+        }
+
+        .button-grid{
+            display:grid;
+            grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+            gap:20px;
+            margin-top:30px;
+        }
+
+        .action-btn{
+            padding:18px;
+            border:none;
+            border-radius:15px;
+            font-size:18px;
+            font-weight:bold;
+            cursor:pointer;
+            width:100%;
+            transition:0.3s;
+        }
+
+        .pink{
+            background:#ff416c;
+            color:white;
+        }
+
+        .black{
+            background:black;
+            color:white;
+        }
+
+        .blue{
+            background:#2196f3;
+            color:white;
+        }
+
+        .green{
+            background:#28a745;
+            color:white;
+        }
+
+        .action-btn:hover{
+            transform:scale(1.05);
+        }
+
+        .request-box{
+            background:white;
+            margin-top:30px;
+            padding:25px;
+            border-radius:20px;
+            box-shadow:0 4px 15px rgba(0,0,0,0.15);
+        }
+
+        .request-card{
+            background:#f4f4f4;
+            padding:15px;
+            border-radius:12px;
+            margin-top:15px;
+        }
+
+        .request-card p{
+            color:#333;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+<div class="profile-container">
+
+    <div class="top-card">
+
+        <div class="avatar">
+            {{ user.name[0] }}
+        </div>
+
+        <h1>{{ user.name }}</h1>
+
+        <p style="color:gray;">
+            Blood Donor
+        </p>
+
+    </div>
+
+    <div class="info-grid">
+
+        <div class="info-card">
+
+            <h3>Personal Details</h3>
+
+            <p><b>Age:</b> {{ user.age }}</p>
+
+            <p><b>Gender:</b> {{ user.gender }}</p>
+
+            <p><b>Blood Group:</b> {{ user.blood }}</p>
+
+            <p><b>Phone:</b> {{ user.phone }}</p>
+
+            <p><b>PIN Code:</b> {{ user.pincode }}</p>
+
+        </div>
+
+        <div class="info-card">
+
+            <h3>Donation Details</h3>
+
+            <p>
+                <b>Total Donations:</b>
+                {{ user.total_donations }}
+            </p>
+
+            <p>
+                <b>Last Donated:</b>
+                {{ user.last_donated }}
+            </p>
+
+            <p>
+                <b>Next Eligible:</b>
+                {{ user.next_eligible_date }}
+            </p>
+
+            <p>
+                <b>Status:</b>
+
+                {% if user.status == 'ACTIVE' %}
+
+                    <span class="status-active">
+                        ACTIVE
+                    </span>
+
+                {% else %}
+
+                    <span class="status-inactive">
+                        INACTIVE
+                    </span>
+
+                {% endif %}
+
+            </p>
+
+        </div>
+
+    </div>
+
+    <div class="button-grid">
+
+        <a href="/request">
+            <button class="action-btn pink">
+                🩸 Raise Request
+            </button>
+        </a>
+
+        <a href="/notifications">
+            <button class="action-btn blue">
+                🔔 Notifications
+            </button>
+        </a>
+
+        <a href="/status">
+            <button class="action-btn green">
+                📋 My Requests
+            </button>
+        </a>
+
+        <a href="/logout">
+            <button class="action-btn black">
+                🚪 Logout
+            </button>
+        </a>
+
+    </div>
+
+    <!-- MY REQUESTS -->
+
+    <div class="request-box">
+
+        <h2 style="color:#ff416c;">
+            My Recent Requests
+        </h2>
+
+        {% if requests_data %}
+
+            {% for req in requests_data %}
+
+            <div class="request-card">
+
+                <p>
+                    <b>Blood:</b>
+                    {{ req.blood }}
+                </p>
+
+                <p>
+                    <b>Amount:</b>
+                    {{ req.amount }} ML
+                </p>
+
+                <p>
+                    <b>Status:</b>
+                    {{ req.status }}
+                </p>
+
+                <p>
+                    <b>Date:</b>
+                    {{ req.required_date }}
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p style="color:gray;">
+                No Requests Yet
+            </p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- WHO ACCEPTED MY REQUEST -->
+
+    <div class="request-box">
+
+        <h2 style="color:#28a745;">
+            ✅ Accepted My Requests
+        </h2>
+
+        {% if accepted_for_me %}
+
+            {% for item in accepted_for_me %}
+
+            <div class="request-card">
+
+                <p>
+                    <b>Donor:</b>
+                    {{ item.donor_name }}
+                </p>
+
+                <p>
+                    <b>Phone:</b>
+                    {{ item.donor_phone }}
+                </p>
+
+                <p>
+                    <b>Blood:</b>
+                    {{ item.blood }}
+                </p>
+
+                <p>
+                    <b>Amount:</b>
+                    {{ item.donated_amount }} ML
+                </p>
+
+                <p>
+                    <b>Status:</b>
+                    {{ item.status }}
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>No one accepted yet</p>
+
+        {% endif %}
+
+    </div>
+
+
+    <!-- REQUESTS I ACCEPTED -->
+
+    <div class="request-box">
+
+        <h2 style="color:#2196f3;">
+            🩸 Requests I Accepted
+        </h2>
+
+        {% if my_accepts %}
+
+            {% for item in my_accepts %}
+
+            <div class="request-card">
+
+                <p>
+                    <b>Requester:</b>
+                    {{ item.requester_name }}
+                </p>
+
+                <p>
+                    <b>Blood:</b>
+                    {{ item.blood }}
+                </p>
+
+                <p>
+                    <b>Amount:</b>
+                    {{ item.donated_amount }} ML
+                </p>
+
+                <p>
+                    <b>Status:</b>
+                    {{ item.status }}
+                </p>
+
+            </div>
+
+            {% endfor %}
+
+        {% else %}
+
+            <p>No accepted requests</p>
+
+        {% endif %}
+
+    </div>
+
+</div>
+
+</body>
+</html>

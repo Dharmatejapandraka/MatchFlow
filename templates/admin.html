@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+    <title>Admin Login</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🛡️ Admin Login</h2>
+
+    <form method="POST" autocomplete="off">
+
+        <input type="text"
+               name="username"
+               placeholder="Admin Username"
+               autocomplete="off"
+               required>
+
+        <input type="password"
+               name="password"
+               placeholder="Admin Password"
+               autocomplete="new-password"
+               required>
+
+        <button type="submit">
+
+            Login
+
+        </button>
+
+    </form>
+
+</div>
+
+</body>
+</html>

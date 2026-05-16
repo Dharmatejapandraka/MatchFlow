@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+    <title>Notifications</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h2>🔔 Blood Request Notifications</h2>
+
+    {% if notifications %}
+
+        {% for note in notifications %}
+
+        <div class="card">
+
+            <h3>
+                {{ note.requester_name }}
+            </h3>
+
+            <p>
+                <b>Blood Group:</b>
+                {{ note.blood }}
+            </p>
+
+            <p>
+                <b>Required Amount:</b>
+                {{ note.amount }} ML
+            </p>
+
+            <p>
+                <b>Date:</b>
+                {{ note.required_date }}
+            </p>
+
+            <p>
+                <b>Time:</b>
+                {{ note.required_time }}
+            </p>
+
+            <br>
+
+            {% if note.accept_status == 'ACCEPTED' or note.accept_status == 'COMPLETED' %}
+
+                <button style="
+                    background:green;
+                    color:white;
+                    cursor:not-allowed;
+                    padding:12px 25px;
+                    border:none;
+                    border-radius:10px;
+                    font-size:18px;
+                    font-weight:bold;
+                " disabled>
+
+                    ✅ ACCEPTED
+
+                </button>
+
+            {% else %}
+
+                <form action="/accept/{{ note.id }}/{{ session['user_id'] }}"
+                      method="POST">
+
+                    <select name="donated_amount" required>
+
+                        <option value="">
+                            Select Amount
+                        </option>
+
+                        <option value="350">
+                            350 ML
+                        </option>
+
+                        <option value="500">
+                            500 ML
+                        </option>
+
+                    </select>
+
+                    <br><br>
+
+                    <button type="submit">
+
+                        Accept Request
+
+                    </button>
+
+                </form>
+
+            {% endif %}
+
+        </div>
+
+        {% endfor %}
+
+    {% else %}
+
+        <h3 class="error">
+
+            No Notifications ❌
+
+        </h3>
+
+    {% endif %}
+
+    <a href="/profile">
+
+        <button class="back">
+
+            Back Profile
+
+        </button>
+
+    </a>
+
+</div>
+
+</body>
+</html>
