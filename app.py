@@ -863,13 +863,17 @@ def admin_logout():
 def reset_db():
     import os
 
-    if os.path.exists("database.db"):
-        os.remove("database.db")
+    with app.app_context():
 
-    db.create_all()
+        db.session.remove()
+        db.drop_all()
+
+        if os.path.exists("database.db"):
+            os.remove("database.db")
+
+        db.create_all()
 
     return "Database Fully Reset Successfully"
-
 
 # ---------------- RUN APP ----------------
 
